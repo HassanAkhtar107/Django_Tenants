@@ -1,0 +1,7 @@
+Django
+python-dotenv
+psycopg[binary]
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+django-tenants
