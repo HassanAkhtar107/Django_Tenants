@@ -1,0 +1,23 @@
+    <div class="tenant-info">
+        <strong>Current Tenant:</strong> {{ request.tenant.name }}
+    </div>
+    
+    <h1>Campus List</h1>
+    
+    {% if projects %}
+        <ul>
+        {% for project in projects %}
+            <li>{{ project.campus_name}}</li>
+            <li>{{ project.campus_address}}</li>
+            <ul>
+                {% for dept in project.departments.all %}
+                    <li>{{ dept.dep_name}}</li>
+                {% empty %}
+                    <li>No Department</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No campuses found.</p>
+    {% endif %}

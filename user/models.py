@@ -11,9 +11,6 @@ class Client(TenantMixin):
 class Domain(DomainMixin):
     pass
 
-# class User(AbstractUser):
-#     pass
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None, **extra_fields):
         if not email:
@@ -46,8 +43,6 @@ class User(AbstractUser):
     username = models.CharField(max_length=150, null=True)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10,  default='user')
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.DateTimeField(auto_now=True)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

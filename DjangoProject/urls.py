@@ -20,8 +20,10 @@ from django.contrib import admin
 
 def home(request):
     return HttpResponse('Welcome to Django')
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path('',home),
+    path("admin/", admin.site.urls),
+    path('tenant/', include('campus.urls')),
     path('api/', include('user.urls')),
 ]
