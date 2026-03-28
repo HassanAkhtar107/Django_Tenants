@@ -103,15 +103,8 @@ SIMPLE_JWT = {
 }
 
 if os.environ.get('DATABASE_URL'):
+    print("RAILWAY DEBUG: Using DATABASE_URL")
     DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django_tenants.postgresql_backend',
-    #     'NAME': os.environ['POSTGRES_DB'],
-    #     'USER': os.environ['POSTGRES_USER'],
-    #     'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-    #     'HOST': os.environ['POSTGRES_HOST'],
-    #     'PORT': os.environ['POSTGRES_PORT'],
-    # }
         'default': dj_database_url.config(
             engine='django_tenants.postgresql_backend',
             conn_max_age=600,
@@ -119,6 +112,7 @@ if os.environ.get('DATABASE_URL'):
         )
     }
 else:
+    print(f"RAILWAY DEBUG: DATABASE_URL not found. host={os.environ.get('POSTGRES_HOST')}")
     DATABASES = {
         'default': {
             'ENGINE': 'django_tenants.postgresql_backend',
@@ -129,6 +123,15 @@ else:
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
     }
+
+ # 'default': {
+    #     'ENGINE': 'django_tenants.postgresql_backend',
+    #     'NAME': os.environ['POSTGRES_DB'],
+    #     'USER': os.environ['POSTGRES_USER'],
+    #     'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+    #     'HOST': os.environ['POSTGRES_HOST'],
+    #     'PORT': os.environ['POSTGRES_PORT'],
+    # }
 
 DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
