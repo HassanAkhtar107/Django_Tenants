@@ -10,10 +10,10 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^@uf4o3hef2*x*gtsmf3nnvd)7-wdc^pd26==l@35p!9=59tp0'
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-^@uf4o3hef2*x*gtsmf3nnvd)7-wdc^pd26==l@35p!9=59tp0")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -113,7 +113,9 @@ DATABASES = {
     # }
     'default': dj_database_url.config(
         default=f"postgres://{os.getenv('POSTGRES_USER', 'postgres')}:{os.getenv('POSTGRES_PASSWORD', 'hassan')}@{os.getenv('POSTGRES_HOST', 'db')}:{os.getenv('POSTGRES_PORT', '5432')}/{os.getenv('POSTGRES_DB', 'postgresDB')}",
-        engine='django_tenants.postgresql_backend'
+        engine='django_tenants.postgresql_backend',
+        conn_max_age=600,
+        ssl_require=True if os.environ.get('DATABASE_URL', '').startswith('https') or os.environ.get('RAILWAY_ENVIRONMENT_NAME') else False 
     )
 }
 
