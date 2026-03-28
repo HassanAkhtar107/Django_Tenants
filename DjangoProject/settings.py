@@ -102,7 +102,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
 }
 
-DATABASES = {
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
     # 'default': {
     #     'ENGINE': 'django_tenants.postgresql_backend',
     #     'NAME': os.environ['POSTGRES_DB'],
@@ -111,13 +112,23 @@ DATABASES = {
     #     'HOST': os.environ['POSTGRES_HOST'],
     #     'PORT': os.environ['POSTGRES_PORT'],
     # }
-    'default': dj_database_url.config(
-        default=f"postgres://{os.getenv('POSTGRES_USER', 'postgres')}:{os.getenv('POSTGRES_PASSWORD', 'hassan')}@{os.getenv('POSTGRES_HOST', 'db')}:{os.getenv('POSTGRES_PORT', '5432')}/{os.getenv('POSTGRES_DB', 'postgresDB')}",
-        engine='django_tenants.postgresql_backend',
-        conn_max_age=600,
-        ssl_require=True if os.environ.get('DATABASE_URL', '').startswith('https') or os.environ.get('RAILWAY_ENVIRONMENT_NAME') else False 
-    )
-}
+        'default': dj_database_url.config(
+            engine='django_tenants.postgresql_backend',
+            conn_max_age=600,
+            ssl_require=True if os.environ.get('RAILWAY_ENVIRONMENT_NAME') else False 
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django_tenants.postgresql_backend',
+            'NAME': os.environ.get('POSTGRES_DB', 'postgresDB'),
+            'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'hassan'),
+            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        }
+    }
 
 DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
