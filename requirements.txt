@@ -7,3 +7,4 @@ djangorestframework-simplejwt
 django-tenants
 dj-database-url
 gunicorn
+whitenoise
