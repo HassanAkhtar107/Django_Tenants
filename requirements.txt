@@ -5,4 +5,5 @@ django-cors-headers
 djangorestframework
 djangorestframework-simplejwt
 django-tenants
-dj-database-url
+dj-database-url
+gunicorn
