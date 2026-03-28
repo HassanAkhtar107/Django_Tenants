@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
+
 
 load_dotenv()
 
@@ -27,6 +29,8 @@ CORS_ALLOWED_ORIGINS = [
 
 SHARED_APPS = [
     'django_tenants',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -40,8 +44,6 @@ SHARED_APPS = [
 
 TENANT_APPS = [
     'campus',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
 ]
 
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
@@ -101,14 +103,18 @@ SIMPLE_JWT = {
 }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',
-        'NAME': os.environ['POSTGRES_DB'],
-        'USER': os.environ['POSTGRES_USER'],
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-        'HOST': os.environ['POSTGRES_HOST'],
-        'PORT': os.environ['POSTGRES_PORT'],
-    }
+    # 'default': {
+    #     'ENGINE': 'django_tenants.postgresql_backend',
+    #     'NAME': os.environ['POSTGRES_DB'],
+    #     'USER': os.environ['POSTGRES_USER'],
+    #     'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+    #     'HOST': os.environ['POSTGRES_HOST'],
+    #     'PORT': os.environ['POSTGRES_PORT'],
+    # }
+    'default': dj_database_url.config(
+        default=f"postgres://{os.getenv('POSTGRES_USER', 'postgres')}:{os.getenv('POSTGRES_PASSWORD', 'hassan')}@{os.getenv('POSTGRES_HOST', 'db')}:{os.getenv('POSTGRES_PORT', '5432')}/{os.getenv('POSTGRES_DB', 'postgresDB')}",
+        engine='django_tenants.postgresql_backend'
+    )
 }
 
 DATABASE_ROUTERS = (

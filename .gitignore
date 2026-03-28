@@ -1,0 +1,9 @@
+# Git Ignore for Django
+venv/
+.env
+*.pyc
+__pycache__/
+db.sqlite3
+.vscode/
+node_modules/
+.docker-compose.yaml.tmp
