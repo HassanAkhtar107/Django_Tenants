@@ -16,23 +16,22 @@ def create_public_tenant():
     if created:
         print("Public tenant created.")
 
-    # Get domain from environment or fallback
-    domain_name = os.environ.get('RAILWAY_PUBLIC_DOMAIN', 'djangotenants-production.up.railway.app')
-    
-    # Create the domain for public tenant
-    domain, created = Domain.objects.get_or_create(
-        domain=domain_name,
-        tenant=tenant,
-        is_primary=True
-    )
-    if created:
-        print(f"Domain '{domain_name}' created for public tenant.")
-    else:
-        # If it already exists but is different, update it
-        if domain.domain != domain_name:
-            domain.domain = domain_name
-            domain.save()
-            print(f"Updated domain to '{domain_name}'.")
+    # List of domains to create/update
+    # We add both localhost (for your computer) and the Railway domain
+    domains = [
+        'localhost',
+        '127.0.0.1',
+        os.environ.get('RAILWAY_PUBLIC_DOMAIN', 'djangotenants-production.up.railway.app')
+    ]
+
+    for domain_name in domains:
+        domain, created = Domain.objects.get_or_create(
+            domain=domain_name,
+            tenant=tenant,
+            is_primary=(domain_name == domains[-1]) # Make Railway domain the primary
+        )
+        if created:
+            print(f"Domain '{domain_name}' created for public tenant.")
         else:
             print(f"Domain '{domain_name}' already exists.")
 
